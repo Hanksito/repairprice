@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Calculadora de precios para reparaciones y modificaciones de vehículos - Auto Exotic">
+    <meta name="keywords" content="auto, reparación, modificación, tuning, precio, calculadora">
+    <title>Auto Exotic - Calculadora de Precios</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔧 Auto Exotic</h1>
+            <p class="subtitle">Calculadora de Precios</p>
+        </header>
+
+        <main class="calculator">
+            <!-- SECCIÓN: VEHÍCULO -->
+            <section class="section vehicle-section">
+                <h2 class="section-title">🚗 Vehículo</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="vehicle-select">Modelo</label>
+                        <select id="vehicle-select" class="input-field">
+                            <option value="">Seleccionar vehículo...</option>
+                            <option value="buffalo-s">Buffalo S</option>
+                            <option value="dominator">Dominator</option>
+                            <option value="elegy">Elegy RH8</option>
+                            <option value="sultan">Sultan RS</option>
+                            <option value="banshee">Banshee 900R</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicle-category">Categoría</label>
+                        <input type="text" id="vehicle-category" class="input-field" readonly placeholder="Sport">
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicle-price">Precio Base</label>
+                        <input type="text" id="vehicle-price" class="input-field" readonly placeholder="$20,000">
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: ESTÉTICA -->
+            <section class="section aesthetic-section">
+                <h2 class="section-title">✨ Estética</h2>
+                <div class="price-display">
+                    Total: <span id="aesthetic-total">$0</span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="cosmetics">Cosméticos</label>
+                        <input type="number" id="cosmetics" class="input-field" min="0" max="10" value="0">
+                        <span class="price-tag">$100 c/u</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="stance" class="checkbox-input">
+                            <span>Stance</span>
+                        </label>
+                        <span class="price-tag">$100</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="repaint">Repintar</label>
+                        <input type="number" id="repaint" class="input-field" min="0" max="10" value="0">
+                        <span class="price-tag">$100 c/u</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="wheels" class="checkbox-input">
+                            <span>Ruedas</span>
+                        </label>
+                        <span class="price-tag">$100</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lights">Luces</label>
+                        <input type="number" id="lights" class="input-field" min="0" max="10" value="0">
+                        <span class="price-tag">$100 c/u</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="tires" class="checkbox-input">
+                            <span>Llantas</span>
+                        </label>
+                        <span class="price-tag">$100</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="extras">Extras</label>
+                        <input type="number" id="extras" class="input-field" min="0" max="10" value="0">
+                        <span class="price-tag">$100 c/u</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: RENDIMIENTO -->
+            <section class="section performance-section">
+                <h2 class="section-title">⚡ Rendimiento</h2>
+                <div class="price-display">
+                    Total: <span id="performance-total">$0</span>
+                </div>
+
+                <!-- Motor -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="motor-enable" class="checkbox-input upgrade-toggle">
+                            <span class="upgrade-name">Motor</span>
+                        </label>
+                        <span class="upgrade-price" id="motor-price">$0</span>
+                    </div>
+                    <div class="level-selector" id="motor-levels">
+                        <label class="level-option">
+                            <input type="radio" name="motor" value="1">
+                            <span>#1 - $200</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="motor" value="2">
+                            <span>#2 - $220</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="motor" value="3">
+                            <span>#3 - $240</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="motor" value="4">
+                            <span>#4 - $260</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="motor" value="5" checked>
+                            <span>#5 - $280</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Frenos -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="brakes-enable" class="checkbox-input upgrade-toggle">
+                            <span class="upgrade-name">Frenos</span>
+                        </label>
+                        <span class="upgrade-price" id="brakes-price">$0</span>
+                    </div>
+                    <div class="level-selector" id="brakes-levels">
+                        <label class="level-option">
+                            <input type="radio" name="brakes" value="1">
+                            <span>#1 - $200</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="brakes" value="2">
+                            <span>#2 - $220</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="brakes" value="3">
+                            <span>#3 - $240</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="brakes" value="4">
+                            <span>#4 - $260</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="brakes" value="5" checked>
+                            <span>#5 - $280</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Transmisión -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="transmission-enable" class="checkbox-input upgrade-toggle">
+                            <span class="upgrade-name">Transmisión</span>
+                        </label>
+                        <span class="upgrade-price" id="transmission-price">$0</span>
+                    </div>
+                    <div class="level-selector" id="transmission-levels">
+                        <label class="level-option">
+                            <input type="radio" name="transmission" value="1">
+                            <span>#1 - $200</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="transmission" value="2">
+                            <span>#2 - $220</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="transmission" value="3">
+                            <span>#3 - $240</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="transmission" value="4">
+                            <span>#4 - $260</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="transmission" value="5" checked>
+                            <span>#5 - $280</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Suspensión -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="suspension-enable" class="checkbox-input upgrade-toggle">
+                            <span class="upgrade-name">Suspensión</span>
+                        </label>
+                        <span class="upgrade-price" id="suspension-price">$0</span>
+                    </div>
+                    <div class="level-selector" id="suspension-levels">
+                        <label class="level-option">
+                            <input type="radio" name="suspension" value="1">
+                            <span>#1 - $200</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="suspension" value="2">
+                            <span>#2 - $220</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="suspension" value="3">
+                            <span>#3 - $240</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="suspension" value="4">
+                            <span>#4 - $260</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="suspension" value="5" checked>
+                            <span>#5 - $280</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Blindaje -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="armor-enable" class="checkbox-input upgrade-toggle">
+                            <span class="upgrade-name">Blindaje</span>
+                        </label>
+                        <span class="upgrade-price" id="armor-price">$0</span>
+                    </div>
+                    <div class="level-selector" id="armor-levels">
+                        <label class="level-option">
+                            <input type="radio" name="armor" value="1">
+                            <span>#1 - $200</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="armor" value="2">
+                            <span>#2 - $220</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="armor" value="3">
+                            <span>#3 - $240</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="armor" value="4">
+                            <span>#4 - $260</span>
+                        </label>
+                        <label class="level-option">
+                            <input type="radio" name="armor" value="5">
+                            <span>#5 - $280</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Turbo -->
+                <div class="upgrade-item">
+                    <div class="upgrade-header">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="turbo-enable" class="checkbox-input">
+                            <span class="upgrade-name">Turbo</span>
+                        </label>
+                        <span class="upgrade-price">$400</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: REPARACIÓN -->
+            <section class="section repair-section">
+                <h2 class="section-title">🔧 Reparación</h2>
+                <div class="price-display">
+                    Total: <span id="repair-total">$0</span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="repair-amount">Reparación</label>
+                        <input type="number" id="repair-amount" class="input-field" min="0" max="100" value="0">
+                        <span class="price-tag">$0 c/u</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="tow-service" class="checkbox-input">
+                            <span>Servicio de Grúa</span>
+                        </label>
+                        <span class="price-tag">$0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: MANTENIMIENTO -->
+            <section class="section maintenance-section">
+                <h2 class="section-title">🛠️ Mantenimiento</h2>
+                <div class="price-display">
+                    Total: <span id="maintenance-total">$0</span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="maint-suspension" class="checkbox-input">
+                            <span>Suspensión</span>
+                        </label>
+                        <span class="price-tag">$200</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="maint-tires" class="checkbox-input">
+                            <span>Llantas</span>
+                        </label>
+                        <span class="price-tag">$50</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="maint-oil" class="checkbox-input">
+                            <span>Aceite de Motor</span>
+                        </label>
+                        <span class="price-tag">$20</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="maint-clutch" class="checkbox-input">
+                            <span>Embrague</span>
+                        </label>
+                        <span class="price-tag">$100</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="maint-air-filter" class="checkbox-input">
+                            <span>Filtro de Aire</span>
+                        </label>
+                        <span class="price-tag">$10</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="maint-spark-plugs" class="checkbox-input">
+                            <span>Bujías</span>
+                        </label>
+                        <span class="price-tag">$50</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="maint-brake-pads" class="checkbox-input">
+                            <span>Pastillas de Freno</span>
+                        </label>
+                        <span class="price-tag">$30</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: TUNING DE NEUMÁTICOS -->
+            <section class="section tuning-section">
+                <h2 class="section-title">🏁 Tuning de Neumáticos</h2>
+                <div class="price-display">
+                    Total: <span id="tuning-total">$0</span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="drift-kit" class="checkbox-input">
+                            <span>Kit de Drift</span>
+                        </label>
+                        <span class="price-tag">$0</span>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="tire-type" class="checkbox-input">
+                            <span>Tipo de Neumáticos</span>
+                        </label>
+                        <span class="price-tag">$0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN: CONVENIO/DESCUENTO -->
+            <section class="section discount-section">
+                <h2 class="section-title">💰 Convenio / Descuento</h2>
+                <div class="form-group">
+                    <label for="discount">Descuento (%)</label>
+                    <input type="number" id="discount" class="input-field" min="0" max="100" value="0" step="1">
+                </div>
+            </section>
+
+            <!-- RESUMEN FINAL -->
+            <section class="summary">
+                <h2 class="summary-title">📊 Resumen Total</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <span class="summary-label">Estética:</span>
+                        <span class="summary-value" id="summary-aesthetic">$0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Rendimiento:</span>
+                        <span class="summary-value" id="summary-performance">$0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Reparación:</span>
+                        <span class="summary-value" id="summary-repair">$0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Mantenimiento:</span>
+                        <span class="summary-value" id="summary-maintenance">$0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Tuning:</span>
+                        <span class="summary-value" id="summary-tuning">$0</span>
+                    </div>
+                    <div class="summary-item subtotal">
+                        <span class="summary-label">Subtotal:</span>
+                        <span class="summary-value" id="summary-subtotal">$0</span>
+                    </div>
+                    <div class="summary-item discount-item">
+                        <span class="summary-label">Descuento:</span>
+                        <span class="summary-value" id="summary-discount">-$0</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span class="summary-label">TOTAL:</span>
+                        <span class="summary-value" id="summary-total">$0</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="reset-btn" class="btn btn-secondary">🔄 Reiniciar</button>
+                    <button id="print-btn" class="btn btn-primary">🖨️ Imprimir</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2026 Auto Exotic | Calculadora de Precios</p>
+        </footer>
+    </div>
+
+    <script src="vehicles-data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
