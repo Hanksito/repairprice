@@ -343,7 +343,7 @@ function calculateRepair() {
 function calculateMaintenance() {
     if (!selectedVehicle) return 0;
 
-    const multiplier = getMaint enanceMultiplier(selectedVehicle.value);
+    const multiplier = getMaintenanceMultiplier(selectedVehicle.value);
     let total = 0;
 
     total += elements.maintSuspension.checked ? Math.round(200 * multiplier) : 0;
