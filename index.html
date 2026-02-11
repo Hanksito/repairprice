@@ -24,15 +24,10 @@
                 <h2 class="section-title">🚗 Vehículo</h2>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="vehicle-select">Modelo</label>
-                        <select id="vehicle-select" class="input-field">
-                            <option value="">Seleccionar vehículo...</option>
-                            <option value="buffalo-s">Buffalo S</option>
-                            <option value="dominator">Dominator</option>
-                            <option value="elegy">Elegy RH8</option>
-                            <option value="sultan">Sultan RS</option>
-                            <option value="banshee">Banshee 900R</option>
-                        </select>
+                        <label for="vehicle-search">Modelo</label>
+                        <input type="text" id="vehicle-search" class="input-field" placeholder="Buscar vehículo..." autocomplete="off">
+                        <input type="hidden" id="vehicle-select">
+                        <div id="vehicle-dropdown" class="autocomplete-dropdown" style="display:none;"></div>
                     </div>
                     <div class="form-group">
                         <label for="vehicle-category">Categoría</label>
@@ -408,7 +403,12 @@
                 <h2 class="section-title">💰 Convenio / Descuento</h2>
                 <div class="form-group">
                     <label for="discount">Descuento (%)</label>
-                    <input type="number" id="discount" class="input-field" min="0" max="100" value="0" step="1">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="number" id="discount" class="input-field" min="0" max="100" value="0" step="1" style="flex: 1;">
+                        <button type="button" class="btn-discount" onclick="setDiscount(5)">5%</button>
+                        <button type="button" class="btn-discount" onclick="setDiscount(10)">10%</button>
+                        <button type="button" class="btn-discount" onclick="setDiscount(15)">15%</button>
+                    </div>
                 </div>
             </section>
 

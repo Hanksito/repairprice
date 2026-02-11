@@ -1,676 +1,342 @@
-// Import vehicle database
-// Note: In production, you would import this. For now, we'll include it inline or via script tag
+// AUTO EXOTIC - CALCULADORA DE PRECIOS V2
+// Updated with: Autocomplete, Fixed Performance Selection, Exact Prices, Discounts
 
-// Vehicle Database - This will be loaded from vehicles-data.js
+// Database will be loaded from vehicles-data.js
 let VEHICLE_DATABASE = [];
 let selectedVehicle = null;
 
-// Pricing calculation based on vehicle value
-function calculatePrice(basePrice, vehicleValue) {
-    // Base calculation: price scales with vehicle value 
-    // Base reference: $20,000 vehicle = 1x multiplier
-    const multiplier = vehicleValue / 20000;
-    return Math.round(basePrice * multiplier);
-}
-
-function getPerformancePrice(vehicleValue, level) {
-    // Performance pricing by level
-    const basePrices = [200, 220, 240, 260, 280];
-    const multiplier = vehicleValue / 100000;
-    return Math.round(basePrices[level - 1] * multiplier * 100);
-}
-
-function getAestheticPrice(vehicleValue) {
-    // Aesthetic items cost 0.5% of vehicle value
-    return Math.round(vehicleValue * 0.005);
-}
-
-function getMaintenanceMultiplier(vehicleValue) {
-    if (vehicleValue < 50000) return 1.5;
-    if (vehicleValue < 100000) return 2.0;
-    if (vehicleValue < 300000) return 2.5;
-    return 3.5;
-}
-
-function getDadosPricing(vehicleValue) {
-    if (vehicleValue < 50000) {
-        return [200, 250, 300];
-    } else if (vehicleValue < 100000) {
-        return [250, 300, 350];
-    } else {
-        return [300, 350, 400];
-    }
-}
-
-// State Management
-let calculatorState = {
-    aesthetic: 0,
-    performance: 0,
-    repair: 0,
-    maintenance: 0,
-    tuning: 0,
-    discount: 0
-};
-
 // DOM Elements
 const elements = {
-    // Vehicle
-    vehicleSelect: document.getElementById('vehicle-select'),
-    vehicleCategory: document.getElementById('vehicle-category'),
-    vehiclePrice: document.getElementById('vehicle-price'),
+    // Vehicle search
+    vehicleSearch: null,
+    vehicleSelect: null,
+    vehicleDropdown: null,
+    vehicleCategory: null,
+    vehiclePrice: null,
 
-    // Aesthetic
-    cosmetics: document.getElementById('cosmetics'),
-    stance: document.getElementById('stance'),
-    repaint: document.getElementById('repaint'),
-    wheels: document.getElementById('wheels'),
-    lights: document.getElementById('lights'),
-    tires: document.getElementById('tires'),
-    extras: document.getElementById('extras'),
+    // Performance upgrades
+    perfMotor: null,
+    perfTransmision: null,
+    perfFreno: null,
+    perfSuspension: null,
+    perfTurbo: null,
 
-    // Performance
-    motorEnable: document.getElementById('motor-enable'),
-    brakesEnable: document.getElementById('brakes-enable'),
-    transmissionEnable: document.getElementById('transmission-enable'),
-    suspensionEnable: document.getElementById('suspension-enable'),
-    armorEnable: document.getElementById('armor-enable'),
-    turboEnable: document.getElementById('turbo-enable'),
-
-    // Repair
-    repairAmount: document.getElementById('repair-amount'),
-    towService: document.getElementById('tow-service'),
+    // Aesthetics
+    cosmetics: null,
+    stance: null,
+    repaint: null,
+    wheels: null,
+    lights: null,
+    tires: null,
+    extras: null,
 
     // Maintenance
-    maintSuspension: document.getElementById('maint-suspension'),
-    maintTires: document.getElementById('maint-tires'),
-    maintOil: document.getElementById('maint-oil'),
-    maintClutch: document.getElementById('maint-clutch'),
-    maintAirFilter: document.getElementById('maint-air-filter'),
-    maintSparkPlugs: document.getElementById('maint-spark-plugs'),
-    maintBrakePads: document.getElementById('maint-brake-pads'),
-
-    // Tuning
-    driftKit: document.getElementById('drift-kit'),
-    tireType: document.getElementById('tire-type'),
+    maintSuspension: null,
+    maintMotor: null,
+    maintTransmision: null,
+    maintFreno: null,
 
     // Discount
-    discount: document.getElementById('discount'),
+    discount: null,
 
     // Totals
-    aestheticTotal: document.getElementById('aesthetic-total'),
-    performanceTotal: document.getElementById('performance-total'),
-    repairTotal: document.getElementById('repair-total'),
-    maintenanceTotal: document.getElementById('maintenance-total'),
-    tuningTotal: document.getElementById('tuning-total'),
-
-    // Summary
-    summaryAesthetic: document.getElementById('summary-aesthetic'),
-    summaryPerformance: document.getElementById('summary-performance'),
-    summaryRepair: document.getElementById('summary-repair'),
-    summaryMaintenance: document.getElementById('summary-maintenance'),
-    summaryTuning: document.getElementById('summary-tuning'),
-    summarySubtotal: document.getElementById('summary-subtotal'),
-    summaryDiscount: document.getElementById('summary-discount'),
-    summaryTotal: document.getElementById('summary-total'),
-
-    // Buttons
-    resetBtn: document.getElementById('reset-btn'),
-    printBtn: document.getElementById('print-btn')
+    performanceTotal: null,
+    estheticsTotal: null,
+    maintenanceTotal: null,
+    tuningTotal: null,
+    finalTotal: null
 };
 
-// Load vehicle database from vehicles-data.js
-async function loadVehicleDatabase() {
-    try {
-        // Try to load from external file
-        const response = await fetch('vehicles-data.js');
-        if (response.ok) {
-            const script = document.createElement('script');
-            script.src = 'vehicles-data.js';
-            document.head.appendChild(script);
-        }
-    } catch (error) {
-        console.log('Loading fallback vehicle data');
-    }
+// Initialize app
+document.addEventListener('DOMContentLoaded', () => {
+    initializeElements();
+    loadVehicleDatabase();
+    setupEventListeners();
+    calculate All();
+});
 
-    // Fallback vehicle data if external file not available
-    if (!window.VEHICLE_DATABASE || window.VEHICLE_DATABASE.length === 0) {
-        // Load inline vehicle data (same as vehicles-data.js)
-        loadInlineVehicleData();
-    }
+function initializeElements() {
+    // Vehicle search
+    elements.vehicleSearch = document.getElementById('vehicle-search');
+    elements.vehicleSelect = document.getElementById('vehicle-select');
+    elements.vehicleDropdown = document.getElementById('vehicle-dropdown');
+    elements.vehicleCategory = document.getElementById('vehicle-category');
+    elements.vehiclePrice = document.getElementById('vehicle-price');
 
-    populateVehicleSelector();
+    // Discount
+    elements.discount = document.getElementById('discount');
+
+    // Totals
+    elements.performanceTotal = document.getElementById('performance-total');
+    elements.estheticsTotal = document.getElementById('esthetics-total');
+    elements.maintenanceTotal = document.getElementById('maintenance-total');
+    elements.tuningTotal = document.getElementById('tuning-total');
+    elements.finalTotal = document.getElementById('final-total');
 }
 
-function loadInlineVehicleData() {
-    // This will be populated with the same data from vehicles-data.js
-    window.VEHICLE_DATABASE = [
-        // Compactos
-        { name: "Blista", value: 8000, speed: "151 km/h", acceleration: "23%", seats: 2, category: "Compacto" },
-        { name: "Brioso 300", value: 13000, speed: "119 km/h", acceleration: "18%", seats: 2, category: "Compacto" },
-        { name: "Brioso 300 Widebody", value: 17000, speed: "134 km/h", acceleration: "22%", seats: 2, category: "Compacto" },
-        { name: "Brioso R/A", value: 18000, speed: "150 km/h", acceleration: "29%", seats: 2, category: "Compacto" },
-        { name: "Cheburek", value: 12000, speed: "161 km/h", acceleration: "26%", seats: 2, category: "Compacto" },
-        { name: "Club", value: 20000, speed: "150 km/h", acceleration: "24%", seats: 2, category: "Compacto" },
-        { name: "Dilettante", value: 9000, speed: "86 km/h", acceleration: "10%", seats: 4, category: "Compacto" },
-        { name: "FR36", value: 56000, speed: "170 km/h", acceleration: "30%", seats: 2, category: "Compacto" },
-        { name: "Issi", value: 10000, speed: "151 km/h", acceleration: "23%", seats: 2, category: "Compacto" },
-        { name: "Issi Classic", value: 12000, speed: "143 km/h", acceleration: "26%", seats: 2, category: "Compacto" },
-        { name: "Kanjo", value: 12000, speed: "160 km/h", acceleration: "32%", seats: 2, category: "Compacto" },
-        { name: "Kanjo SJ", value: 18000, speed: "161 km/h", acceleration: "31%", seats: 2, category: "Compacto" },
-        { name: "Michelli GT", value: 21000, speed: "160 km/h", acceleration: "28%", seats: 2, category: "Compacto" },
-        { name: "Panto", value: 10000, speed: "147 km/h", acceleration: "27%", seats: 2, category: "Compacto" },
-        { name: "Prairie", value: 12000, speed: "147 km/h", acceleration: "22%", seats: 2, category: "Compacto" },
-        { name: "Rhapsody", value: 7000, speed: "149 km/h", acceleration: "23%", seats: 2, category: "Compacto" },
-        { name: "Weevil", value: 11000, speed: "118 km/h", acceleration: "19%", seats: 2, category: "Compacto" },
+function loadVehicleDatabase() {
+    // Load from vehicles-data.js if available, otherwise use sample data
+    if (typeof VEHICLE_DATABASE !== 'undefined' && VEHICLE_DATABASE.length > 0) {
+        console.log(`Loaded ${VEHICLE_DATABASE.length} vehicles from database`);
+    } else {
+        // Sample data (will be replaced by full database)
+        VEHICLE_DATABASE = getSampleVehicles();
+        console.log(`Using sample database with ${VEHICLE_DATABASE.length} vehicles`);
+    }
+}
 
-        // Coupes
-        { name: "Cognoscenti Cabrio", value: 55000, speed: "163 km/h", acceleration: "26%", seats: 2, category: "Coupe" },
-        { name: "Exemplar", value: 32000, speed: "173 km/h", acceleration: "26%", seats: 4, category: "Coupe" },
-        { name: "F620", value: 46000, speed: "173 km/h", acceleration: "24%", seats: 2, category: "Coupe" },
-        { name: "Felon", value: 42000, speed: "165 km/h", acceleration: "24%", seats: 4, category: "Coupe" },
-        { name: "Felon GT", value: 55000, speed: "156 km/h", acceleration: "24%", seats: 2, category: "Coupe" },
-        { name: "Jackal", value: 38000, speed: "166 km/h", acceleration: "22%", seats: 4, category: "Coupe" },
-        { name: "Oracle XS", value: 35000, speed: "166 km/h", acceleration: "27%", seats: 4, category: "Coupe" },
-        { name: "Previon", value: 26000, speed: "169 km/h", acceleration: "32%", seats: 2, category: "Coupe" },
-        { name: "Sentinel", value: 32000, speed: "164 km/h", acceleration: "21%", seats: 2, category: "Coupe" },
-        { name: "Sentinel XS", value: 40000, speed: "164 km/h", acceleration: "21%", seats: 2, category: "Coupe" },
-        { name: "Windsor", value: 95000, speed: "173 km/h", acceleration: "28%", seats: 2, category: "Coupe" },
-        { name: "Windsor Drop", value: 125000, speed: "172 km/h", acceleration: "28%", seats: 2, category: "Coupe" },
-        { name: "Zion", value: 36000, speed: "169 km/h", acceleration: "22%", seats: 2, category: "Coupe" },
-        { name: "Zion Cabrio", value: 45000, speed: "169 km/h", acceleration: "22%", seats: 2, category: "Coupe" },
-
-        // Motos
-        { name: "Akuma", value: 120000, speed: "174 km/h", acceleration: "40%", seats: 2, category: "Moto" },
-        { name: "Avarus", value: 18000, speed: "159 km/h", acceleration: "27%", seats: 1, category: "Moto" },
-        { name: "Bagger", value: 13500, speed: "136 km/h", acceleration: "21%", seats: 2, category: "Moto" },
-        { name: "Bati 801", value: 32000, speed: "177 km/h", acceleration: "30%", seats: 2, category: "Moto" },
-        { name: "Bati 801RR", value: 49000, speed: "177 km/h", acceleration: "30%", seats: 2, category: "Moto" },
-        { name: "BF400", value: 80000, speed: "159 km/h", acceleration: "29%", seats: 2, category: "Moto" },
-        { name: "Carbon RS", value: 18000, speed: "169 km/h", acceleration: "30%", seats: 2, category: "Moto" },
-        { name: "Chimera", value: 38000, speed: "133 km/h", acceleration: "29%", seats: 1, category: "Moto" },
-        { name: "Cliffhanger", value: 9500, speed: "177 km/h", acceleration: "32%", seats: 2, category: "Moto" },
-
-        // Muscle
-        { name: "Blade", value: 15000, speed: "152 km/h", acceleration: "32%", seats: 2, category: "Muscle" },
-        { name: "Broadway", value: 90000, speed: "135 km/h", acceleration: "19%", seats: 2, category: "Muscle" },
-        { name: "Buccaneer", value: 18000, speed: "166 km/h", acceleration: "28%", seats: 2, category: "Muscle" },
-        { name: "Buccaneer Custom", value: 24000, speed: "166 km/h", acceleration: "28%", seats: 2, category: "Muscle" },
-        { name: "Buffalo EVX", value: 120000, speed: "180 km/h", acceleration: "38%", seats: 2, category: "Muscle" },
-        { name: "Chino", value: 15000, speed: "127 km/h", acceleration: "20%", seats: 2, category: "Muscle" },
-        { name: "Chino Custom", value: 19000, speed: "131 km/h", acceleration: "21%", seats: 2, category: "Muscle" },
-        { name: "Clique", value: 20000, speed: "166 km/h", acceleration: "30%", seats: 2, category: "Muscle" },
-        { name: "Coquette BlackFin", value: 55000, speed: "162 km/h", acceleration: "29%", seats: 2, category: "Muscle" },
-        { name: "Deviant", value: 95000, speed: "153 km/h", acceleration: "29%", seats: 2, category: "Muscle" },
-        { name: "Dominator", value: 35000, speed: "174 km/h", acceleration: "29%", seats: 2, category: "Muscle" },
-        { name: "Dominator ASP", value: 70000, speed: "180 km/h", acceleration: "34%", seats: 2, category: "Muscle" },
-        { name: "Dominator GT", value: 120000, speed: "179 km/h", acceleration: "34%", seats: 2, category: "Muscle" },
-        { name: "Gauntlet", value: 30000, speed: "169 km/h", acceleration: "30%", seats: 2, category: "Muscle" },
-        { name: "Gauntlet Hellfire", value: 90000, speed: "175 km/h", acceleration: "36%", seats: 2, category: "Muscle" },
+function getSampleVehicles() {
+    return [
+        { name: "Blista", value: 8000, category: "Compacto", perf: [80, 88, 96, 104, 112], cosmetics: 40, stance: 40, repaint: 40, wheels: 40, lights: 40, tires: 40, extras: 40, dados: [200, 250, 300], maint: 1.5 },
+        { name: "Brioso 300", value: 13000, category: "Compacto", perf: [130, 143, 156, 169, 182], cosmetics: 65, stance: 65, repaint: 65, wheels: 65, lights: 65, tires: 65, extras: 65, dados: [200, 250, 300], maint: 1.5 },
+        { name: "Buffalo S", value: 20000, category: "Sport", perf: [200, 220, 240, 260, 280], cosmetics: 100, stance: 100, repaint: 100, wheels: 100, lights: 100, tires: 100, extras: 100, dados: [200, 250, 300], maint: 1.5 },
+        { name: "Dominator", value: 35000, category: "Muscle", perf: [350, 385, 420, 455, 490], cosmetics: 175, stance: 175, repaint: 175, wheels: 175, lights: 175, tires: 175, extras: 175, dados: [200, 250, 300], maint: 1.5 },
+        { name: "Elegy RH8", value: 38500, category: "Sport", perf: [385, 424, 462, 501, 539], cosmetics: 193, stance: 193, repaint: 193, wheels: 193, lights: 193, tires: 193, extras: 193, dados: [200, 250, 300], maint: 1.5 },
     ];
 }
 
-// Populate vehicle selector with all vehicles from database
-function populateVehicleSelector() {
-    if (!window.VEHICLE_DATABASE) return;
+function setupEventListeners() {
+    // Vehicle autocomplete
+    if (elements.vehicleSearch) {
+        elements.vehicleSearch.addEventListener('input', handleVehicleSearch);
+        elements.vehicleSearch.addEventListener('focus', handleVehicleSearch);
 
-    const select = elements.vehicleSelect;
-    select.innerHTML = '<option value="">Seleccionar vehículo...</option>';
-
-    // Group vehicles by category
-    const categories = {};
-    window.VEHICLE_DATABASE.forEach((vehicle, index) => {
-        if (!categories[vehicle.category]) {
-            categories[vehicle.category] = [];
-        }
-        categories[vehicle.category].push({ ...vehicle, index });
-    });
-
-    // Add vehicles grouped by category
-    Object.keys(categories).sort().forEach(category => {
-        const optgroup = document.createElement('optgroup');
-        optgroup.label = category;
-
-        categories[category].forEach(vehicle => {
-            const option = document.createElement('option');
-            option.value = vehicle.index;
-            option.textContent = `${vehicle.name} - $${vehicle.value.toLocaleString()}`;
-            optgroup.appendChild(option);
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!elements.vehicleSearch.contains(e.target) && !elements.vehicleDropdown.contains(e.target)) {
+                elements.vehicleDropdown.style.display = 'none';
+            }
         });
+    }
 
-        select.appendChild(optgroup);
+    // Discount input
+    if (elements.discount) {
+        elements.discount.addEventListener('input', calculateAll);
+    }
+
+    // All checkboxes and inputs
+    document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el => {
+        el.addEventListener('change', calculateAll);
     });
 }
 
-// Calculation Functions
-function calculateAesthetic() {
-    if (!selectedVehicle) return 0;
+// Autocomplete functionality
+function handleVehicleSearch(e) {
+    const query = e.target.value.toLowerCase();
 
-    const aestheticPrice = getAestheticPrice(selectedVehicle.value);
-    let total = 0;
+    if (query.length === 0) {
+        elements.vehicleDropdown.style.display = 'none';
+        return;
+    }
 
-    total += parseInt(elements.cosmetics.value || 0) * aestheticPrice;
-    total += elements.stance.checked ? aestheticPrice : 0;
-    total += parseInt(elements.repaint.value || 0) * aestheticPrice;
-    total += elements.wheels.checked ? aestheticPrice : 0;
-    total += parseInt(elements.lights.value || 0) * aestheticPrice;
-    total += elements.tires.checked ? aestheticPrice : 0;
-    total += parseInt(elements.extras.value || 0) * aestheticPrice;
+    // Filter vehicles
+    const filtered = VEHICLE_DATABASE.filter(v =>
+        v.name.toLowerCase().includes(query) ||
+        v.category.toLowerCase().includes(query)
+    ).slice(0, 10); // Limit to 10 results
 
-    return total;
+    if (filtered.length === 0) {
+        elements.vehicleDropdown.style.display = 'none';
+        return;
+    }
+
+    // Build dropdown HTML
+    const html = filtered.map(v => `
+        <div class="autocomplete-item" onclick="selectVehicle('${v.name}')">
+            <div>
+                <div class="autocomplete-item-name">${v.name}</div>
+                <div class="autocomplete-item-category">${v.category}</div>
+            </div>
+            <div class="autocomplete-item-value">$${v.value.toLocaleString()}</div>
+        </div>
+    `).join('');
+
+    elements.vehicleDropdown.innerHTML = html;
+    elements.vehicleDropdown.style.display = 'block';
 }
 
+function selectVehicle(vehicleName) {
+    const vehicle = VEHICLE_DATABASE.find(v => v.name === vehicleName);
+    if (!vehicle) return;
+
+    selectedVehicle = vehicle;
+
+    // Update UI
+    elements.vehicleSearch.value = vehicle.name;
+    elements.vehicleSelect.value = vehicle.name;
+    elements.vehicleCategory.value = vehicle.category;
+    elements.vehiclePrice.value = `$${vehicle.value.toLocaleString()}`;
+
+    // Hide dropdown
+    elements.vehicleDropdown.style.display = 'none';
+
+    // Recalculate
+    calculateAll();
+}
+
+// Discount preset functions
+function setDiscount(percent) {
+    if (elements.discount) {
+        elements.discount.value = percent;
+        calculateAll();
+    }
+}
+
+// Calculation functions
 function calculatePerformance() {
     if (!selectedVehicle) return 0;
 
     let total = 0;
 
-    // Motor
-    if (elements.motorEnable.checked) {
-        const motorLevel = document.querySelector('input[name="motor"]:checked');
-        if (motorLevel) {
-            const price = getPerformancePrice(selectedVehicle.value, parseInt(motorLevel.value));
-            total += price;
-            document.getElementById('motor-price').textContent = `$${price.toLocaleString()}`;
-        }
-    } else {
-        document.getElementById('motor-price').textContent = '$0';
-    }
+    // Check each performance upgrade
+    const upgrades = ['perfMotor', 'perfTransmision', 'perfFreno', 'perfSuspension', 'perfTurbo'];
 
-    // Brakes
-    if (elements.brakesEnable.checked) {
-        const brakesLevel = document.querySelector('input[name="brakes"]:checked');
-        if (brakesLevel) {
-            const price = getPerformancePrice(selectedVehicle.value, parseInt(brakesLevel.value));
-            total += price;
-            document.getElementById('brakes-price').textContent = `$${price.toLocaleString()}`;
+    upgrades.forEach(upgradeId => {
+        const checkbox = document.getElementById(upgradeId);
+        if (checkbox && checkbox.checked) {
+            // Find selected level
+            const levelInputs = document.querySelectorAll(`input[name="${upgradeId}-level"]:checked`);
+            if (levelInputs.length > 0) {
+                const level = parseInt(levelInputs[0].value);
+                if (level >= 1 && level <= 5 && selectedVehicle.perf[level - 1]) {
+                    total += selectedVehicle.perf[level - 1];
+                }
+            }
         }
-    } else {
-        document.getElementById('brakes-price').textContent = '$0';
-    }
-
-    // Transmission
-    if (elements.transmissionEnable.checked) {
-        const transmissionLevel = document.querySelector('input[name="transmission"]:checked');
-        if (transmissionLevel) {
-            const price = getPerformancePrice(selectedVehicle.value, parseInt(transmissionLevel.value));
-            total += price;
-            document.getElementById('transmission-price').textContent = `$${price.toLocaleString()}`;
-        }
-    } else {
-        document.getElementById('transmission-price').textContent = '$0';
-    }
-
-    // Suspension
-    if (elements.suspensionEnable.checked) {
-        const suspensionLevel = document.querySelector('input[name="suspension"]:checked');
-        if (suspensionLevel) {
-            const price = getPerformancePrice(selectedVehicle.value, parseInt(suspensionLevel.value));
-            total += price;
-            document.getElementById('suspension-price').textContent = `$${price.toLocaleString()}`;
-        }
-    } else {
-        document.getElementById('suspension-price').textContent = '$0';
-    }
-
-    // Armor
-    if (elements.armorEnable.checked) {
-        const armorLevel = document.querySelector('input[name="armor"]:checked');
-        if (armorLevel) {
-            const price = getPerformancePrice(selectedVehicle.value, parseInt(armorLevel.value));
-            total += price;
-            document.getElementById('armor-price').textContent = `$${price.toLocaleString()}`;
-        }
-    } else {
-        document.getElementById('armor-price').textContent = '$0';
-    }
-
-    // Turbo
-    if (elements.turboEnable.checked) {
-        const turboPrice = getPerformancePrice(selectedVehicle.value, 3) * 2; // Turbo costs ~2x level 3
-        total += turboPrice;
-    }
+    });
 
     return total;
 }
 
-function calculateRepair() {
+function calculateEsthetics() {
+    if (!selectedVehicle) return 0;
+
     let total = 0;
-    total += parseInt(elements.repairAmount.value || 0) * 0; // Repair is free in the excel
-    total += elements.towService.checked ? 0 : 0; // Tow service is free
+
+    const items = ['cosmetics', 'stance', 'repaint', 'wheels', 'lights', 'tires', 'extras'];
+
+    items.forEach(item => {
+        const checkbox = document.getElementById(item);
+        if (checkbox && checkbox.checked && selectedVehicle[item]) {
+            total += selectedVehicle[item];
+        }
+    });
+
     return total;
 }
 
 function calculateMaintenance() {
     if (!selectedVehicle) return 0;
 
-    const multiplier = getMaintenanceMultiplier(selectedVehicle.value);
+    const multiplier = selectedVehicle.maint || 1.5;
     let total = 0;
 
-    total += elements.maintSuspension.checked ? Math.round(200 * multiplier) : 0;
-    total += elements.maintTires.checked ? Math.round(50 * multiplier) : 0;
-    total += elements.maintOil.checked ? Math.round(20 * multiplier) : 0;
-    total += elements.maintClutch.checked ? Math.round(100 * multiplier) : 0;
-    total += elements.maintAirFilter.checked ? Math.round(10 * multiplier) : 0;
-    total += elements.maintSparkPlugs.checked ? Math.round(50 * multiplier) : 0;
-    total += elements.maintBrakePads.checked ? Math.round(30 * multiplier) : 0;
+    const items = [
+        { id: 'maint-suspension', cost: 200 },
+        { id: 'maint-motor', cost: 200 },
+        { id: 'maint-transmision', cost: 200 },
+        { id: 'maint-freno', cost: 200 }
+    ];
 
-    return total;
-}
-
-function calculateTuning() {
-    let total = 0;
-    total += elements.driftKit.checked ? 0 : 0; // Free in excel
-    total += elements.tireType.checked ? 0 : 0; // Free in excel
-    return total;
-}
-
-function formatCurrency(amount) {
-    return `$${Math.round(amount).toLocaleString()}`;
-}
-
-function updateTotals() {
-    // Calculate all sections
-    calculatorState.aesthetic = calculateAesthetic();
-    calculatorState.performance = calculatePerformance();
-    calculatorState.repair = calculateRepair();
-    calculatorState.maintenance = calculateMaintenance();
-    calculatorState.tuning = calculateTuning();
-
-    // Update section totals
-    elements.aestheticTotal.textContent = formatCurrency(calculatorState.aesthetic);
-    elements.performanceTotal.textContent = formatCurrency(calculatorState.performance);
-    elements.repairTotal.textContent = formatCurrency(calculatorState.repair);
-    elements.maintenanceTotal.textContent = formatCurrency(calculatorState.maintenance);
-    elements.tuningTotal.textContent = formatCurrency(calculatorState.tuning);
-
-    // Calculate subtotal
-    const subtotal = calculatorState.aesthetic + calculatorState.performance +
-        calculatorState.repair + calculatorState.maintenance +
-        calculatorState.tuning;
-
-    // Calculate discount
-    const discountPercent = parseFloat(elements.discount.value || 0);
-    const discountAmount = (subtotal * discountPercent) / 100;
-    const total = subtotal - discountAmount;
-
-    // Update summary
-    elements.summaryAesthetic.textContent = formatCurrency(calculatorState.aesthetic);
-    elements.summaryPerformance.textContent = formatCurrency(calculatorState.performance);
-    elements.summaryRepair.textContent = formatCurrency(calculatorState.repair);
-    elements.summaryMaintenance.textContent = formatCurrency(calculatorState.maintenance);
-    elements.summaryTuning.textContent = formatCurrency(calculatorState.tuning);
-    elements.summarySubtotal.textContent = formatCurrency(subtotal);
-    elements.summaryDiscount.textContent = `-${formatCurrency(discountAmount)}`;
-    elements.summaryTotal.textContent = formatCurrency(total);
-
-    // Save to localStorage
-    saveState();
-}
-
-// Vehicle Selection
-function updateVehicleInfo() {
-    const selectedIndex = elements.vehicleSelect.value;
-
-    if (selectedIndex !== '' && window.VEHICLE_DATABASE) {
-        selectedVehicle = window.VEHICLE_DATABASE[parseInt(selectedIndex)];
-        elements.vehicleCategory.value = selectedVehicle.category;
-        elements.vehiclePrice.value = `$${selectedVehicle.value.toLocaleString()}`;
-    } else {
-        selectedVehicle = null;
-        elements.vehicleCategory.value = '';
-        elements.vehiclePrice.value = '';
-    }
-
-    updateTotals();
-    saveState();
-}
-
-// State Persistence
-function saveState() {
-    const state = {
-        vehicle: elements.vehicleSelect.value,
-        aesthetic: {
-            cosmetics: elements.cosmetics.value,
-            stance: elements.stance.checked,
-            repaint: elements.repaint.value,
-            wheels: elements.wheels.checked,
-            lights: elements.lights.value,
-            tires: elements.tires.checked,
-            extras: elements.extras.value
-        },
-        performance: {
-            motorEnable: elements.motorEnable.checked,
-            motorLevel: document.querySelector('input[name="motor"]:checked')?.value,
-            brakesEnable: elements.brakesEnable.checked,
-            brakesLevel: document.querySelector('input[name="brakes"]:checked')?.value,
-            transmissionEnable: elements.transmissionEnable.checked,
-            transmissionLevel: document.querySelector('input[name="transmission"]:checked')?.value,
-            suspensionEnable: elements.suspensionEnable.checked,
-            suspensionLevel: document.querySelector('input[name="suspension"]:checked')?.value,
-            armorEnable: elements.armorEnable.checked,
-            armorLevel: document.querySelector('input[name="armor"]:checked')?.value,
-            turboEnable: elements.turboEnable.checked
-        },
-        repair: {
-            amount: elements.repairAmount.value,
-            towService: elements.towService.checked
-        },
-        maintenance: {
-            suspension: elements.maintSuspension.checked,
-            tires: elements.maintTires.checked,
-            oil: elements.maintOil.checked,
-            clutch: elements.maintClutch.checked,
-            airFilter: elements.maintAirFilter.checked,
-            sparkPlugs: elements.maintSparkPlugs.checked,
-            brakePads: elements.maintBrakePads.checked
-        },
-        tuning: {
-            driftKit: elements.driftKit.checked,
-            tireType: elements.tireType.checked
-        },
-        discount: elements.discount.value
-    };
-
-    localStorage.setItem('autoExoticCalculator', JSON.stringify(state));
-}
-
-function loadState() {
-    const savedState = localStorage.getItem('autoExoticCalculator');
-
-    if (!savedState) return;
-
-    try {
-        const state = JSON.parse(savedState);
-
-        // Restore vehicle
-        if (state.vehicle) {
-            elements.vehicleSelect.value = state.vehicle;
-            updateVehicleInfo();
-        }
-
-        // Restore aesthetic
-        if (state.aesthetic) {
-            elements.cosmetics.value = state.aesthetic.cosmetics || 0;
-            elements.stance.checked = state.aesthetic.stance || false;
-            elements.repaint.value = state.aesthetic.repaint || 0;
-            elements.wheels.checked = state.aesthetic.wheels || false;
-            elements.lights.value = state.aesthetic.lights || 0;
-            elements.tires.checked = state.aesthetic.tires || false;
-            elements.extras.value = state.aesthetic.extras || 0;
-        }
-
-        // Restore performance
-        if (state.performance) {
-            elements.motorEnable.checked = state.performance.motorEnable || false;
-            if (state.performance.motorLevel) {
-                const motorRadio = document.querySelector(`input[name="motor"][value="${state.performance.motorLevel}"]`);
-                if (motorRadio) motorRadio.checked = true;
-            }
-
-            elements.brakesEnable.checked = state.performance.brakesEnable || false;
-            if (state.performance.brakesLevel) {
-                const brakesRadio = document.querySelector(`input[name="brakes"][value="${state.performance.brakesLevel}"]`);
-                if (brakesRadio) brakesRadio.checked = true;
-            }
-
-            elements.transmissionEnable.checked = state.performance.transmissionEnable || false;
-            if (state.performance.transmissionLevel) {
-                const transmissionRadio = document.querySelector(`input[name="transmission"][value="${state.performance.transmissionLevel}"]`);
-                if (transmissionRadio) transmissionRadio.checked = true;
-            }
-
-            elements.suspensionEnable.checked = state.performance.suspensionEnable || false;
-            if (state.performance.suspensionLevel) {
-                const suspensionRadio = document.querySelector(`input[name="suspension"][value="${state.performance.suspensionLevel}"]`);
-                if (suspensionRadio) suspensionRadio.checked = true;
-            }
-
-            elements.armorEnable.checked = state.performance.armorEnable || false;
-            if (state.performance.armorLevel) {
-                const armorRadio = document.querySelector(`input[name="armor"][value="${state.performance.armorLevel}"]`);
-                if (armorRadio) armorRadio.checked = true;
-            }
-
-            elements.turboEnable.checked = state.performance.turboEnable || false;
-        }
-
-        // Restore repair
-        if (state.repair) {
-            elements.repairAmount.value = state.repair.amount || 0;
-            elements.towService.checked = state.repair.towService || false;
-        }
-
-        // Restore maintenance
-        if (state.maintenance) {
-            elements.maintSuspension.checked = state.maintenance.suspension || false;
-            elements.maintTires.checked = state.maintenance.tires || false;
-            elements.maintOil.checked = state.maintenance.oil || false;
-            elements.maintClutch.checked = state.maintenance.clutch || false;
-            elements.maintAirFilter.checked = state.maintenance.airFilter || false;
-            elements.maintSparkPlugs.checked = state.maintenance.sparkPlugs || false;
-            elements.maintBrakePads.checked = state.maintenance.brakePads || false;
-        }
-
-        // Restore tuning
-        if (state.tuning) {
-            elements.driftKit.checked = state.tuning.driftKit || false;
-            elements.tireType.checked = state.tuning.tireType || false;
-        }
-
-        // Restore discount
-        if (state.discount) {
-            elements.discount.value = state.discount;
-        }
-
-        updateTotals();
-    } catch (error) {
-        console.error('Error loading state:', error);
-    }
-}
-
-function resetCalculator() {
-    if (!confirm('¿Estás seguro de que quieres reiniciar la calculadora?')) {
-        return;
-    }
-
-    // Clear localStorage
-    localStorage.removeItem('autoExoticCalculator');
-
-    // Reset all form fields
-    document.querySelectorAll('input[type="number"]').forEach(input => input.value = 0);
-    document.querySelectorAll('input[type="checkbox"]').forEach(input => input.checked = false);
-    document.querySelectorAll('input[type="radio"]').forEach(input => {
-        if (input.value === '5') {
-            input.checked = true;
+    items.forEach(item => {
+        const checkbox = document.getElementById(item.id);
+        if (checkbox && checkbox.checked) {
+            total += Math.round(item.cost * multiplier);
         }
     });
-    elements.vehicleSelect.value = '';
-    elements.vehicleCategory.value = '';
-    elements.vehiclePrice.value = '';
-    selectedVehicle = null;
 
-    updateTotals();
+    return total;
 }
 
-function printSummary() {
+function calculateRepairs() {
+    let total = 0;
+
+    // Repair: $400, Tow: $200
+    const repairCheckbox = document.getElementById('repair');
+    if (repairCheckbox && repairCheckbox.checked) {
+        total += 400;
+    }
+
+    const towCheckbox = document.getElementById('tow');
+    if (towCheckbox && towCheckbox.checked) {
+        total += 200;
+    }
+
+    return total;
+}
+
+function calculateAll() {
+    // Calculate each section
+    const performance = calculatePerformance();
+    const esthetics = calculateEsthetics();
+    const maintenance = calculateMaintenance();
+    const repairs = calculateRepairs();
+
+    // Update section totals
+    if (elements.performanceTotal) {
+        elements.performanceTotal.textContent = `$${performance.toLocaleString()}`;
+    }
+    if (elements.estheticsTotal) {
+        elements.estheticsTotal.textContent = `$${esthetics.toLocaleString()}`;
+    }
+    if (elements.maintenanceTotal) {
+        elements.maintenanceTotal.textContent = `$${maintenance.toLocaleString()}`;
+    }
+
+    // Calculate subtotal
+    const subtotal = performance + esthetics + maintenance + repairs;
+
+    // Apply discount
+    const discountPercent = parseFloat(elements.discount.value) || 0;
+    const discountAmount = Math.round(subtotal * (discountPercent / 100));
+    const total = subtotal - discountAmount;
+
+    // Update summary section
+    updateSummary(performance, esthetics, maintenance, repairs, subtotal, discountAmount, total);
+}
+
+function updateSummary(performance, esthetics, maintenance, repairs, subtotal, discountAmount, total) {
+    document.getElementById('summary-performance').textContent = `$${performance.toLocaleString()}`;
+    document.getElementById('summary-esthetics').textContent = `$${esthetics.toLocaleString()}`;
+    document.getElementById('summary-maintenance').textContent = `$${maintenance.toLocaleString()}`;
+    document.getElementById('summary-repairs').textContent = `$${repairs.toLocaleString()}`;
+    document.getElementById('summary-subtotal').textContent = `$${subtotal.toLocaleString()}`;
+    document.getElementById('summary-discount').textContent = `-$${discountAmount.toLocaleString()}`;
+    document.getElementById('summary-total').textContent = `$${total.toLocaleString()}`;
+
+    if (elements.finalTotal) {
+        elements.finalTotal.textContent = `$${total.toLocaleString()}`;
+    }
+}
+
+// Reset function
+function resetCalculator() {
+    // Reset vehicle selection
+    selectedVehicle = null;
+    if (elements.vehicleSearch) elements.vehicleSearch.value = '';
+    if (elements.vehicleSelect) elements.vehicleSelect.value = '';
+    if (elements.vehicleCategory) elements.vehicleCategory.value = '';
+    if (elements.vehiclePrice) elements.vehiclePrice.value = '';
+
+    // Reset all checkboxes
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('input[type="radio"]').forEach(rb => rb.checked = false);
+
+    // Reset discount
+    if (elements.discount) elements.discount.value = 0;
+
+    // Recalculate
+    calculateAll();
+}
+
+// Print function
+function printQuote() {
     window.print();
 }
 
-// Event Listeners
-function setupEventListeners() {
-    // Vehicle
-    elements.vehicleSelect.addEventListener('change', updateVehicleInfo);
-
-    // Aesthetic
-    elements.cosmetics.addEventListener('input', updateTotals);
-    elements.stance.addEventListener('change', updateTotals);
-    elements.repaint.addEventListener('input', updateTotals);
-    elements.wheels.addEventListener('change', updateTotals);
-    elements.lights.addEventListener('input', updateTotals);
-    elements.tires.addEventListener('change', updateTotals);
-    elements.extras.addEventListener('input', updateTotals);
-
-    // Performance
-    elements.motorEnable.addEventListener('change', updateTotals);
-    elements.brakesEnable.addEventListener('change', updateTotals);
-    elements.transmissionEnable.addEventListener('change', updateTotals);
-    elements.suspensionEnable.addEventListener('change', updateTotals);
-    elements.armorEnable.addEventListener('change', updateTotals);
-    elements.turboEnable.addEventListener('change', updateTotals);
-
-    // Performance levels
-    document.querySelectorAll('input[name="motor"]').forEach(radio => {
-        radio.addEventListener('change', updateTotals);
-    });
-    document.querySelectorAll('input[name="brakes"]').forEach(radio => {
-        radio.addEventListener('change', updateTotals);
-    });
-    document.querySelectorAll('input[name="transmission"]').forEach(radio => {
-        radio.addEventListener('change', updateTotals);
-    });
-    document.querySelectorAll('input[name="suspension"]').forEach(radio => {
-        radio.addEventListener('change', updateTotals);
-    });
-    document.querySelectorAll('input[name="armor"]').forEach(radio => {
-        radio.addEventListener('change', updateTotals);
-    });
-
-    // Repair
-    elements.repairAmount.addEventListener('input', updateTotals);
-    elements.towService.addEventListener('change', updateTotals);
-
-    // Maintenance
-    elements.maintSuspension.addEventListener('change', updateTotals);
-    elements.maintTires.addEventListener('change', updateTotals);
-    elements.maintOil.addEventListener('change', updateTotals);
-    elements.maintClutch.addEventListener('change', updateTotals);
-    elements.maintAirFilter.addEventListener('change', updateTotals);
-    elements.maintSparkPlugs.addEventListener('change', updateTotals);
-    elements.maintBrakePads.addEventListener('change', updateTotals);
-
-    // Tuning
-    elements.driftKit.addEventListener('change', updateTotals);
-    elements.tireType.addEventListener('change', updateTotals);
-
-    // Discount
-    elements.discount.addEventListener('input', updateTotals);
-
-    // Buttons
-    elements.resetBtn.addEventListener('click', resetCalculator);
-    elements.printBtn.addEventListener('click', printSummary);
-}
-
-// Initialize
-async function init() {
-    await loadVehicleDatabase();
-    setupEventListeners();
-    loadState();
-    updateTotals();
-}
-
-// Run on page load
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
-}
+// Make functions global for onclick handlers
+window.selectVehicle = selectVehicle;
+window.setDiscount = setDiscount;
+window.resetCalculator = resetCalculator;
+window.printQuote = printQuote;
+window.calculateAll = calculateAll;
