@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeElements();
     loadVehicleDatabase();
     setupEventListeners();
-    calculate All();
+    calculateAll();
 });
 
 function initializeElements() {
