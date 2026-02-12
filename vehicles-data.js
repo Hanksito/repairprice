@@ -1,165 +1,68 @@
-// IMPORTANT: This file will be generated from the spreadsheet data
-// Vehicle database with pricing based on vehicle value
-// Formula: Each modification price = vehicle_value * multiplier
+// AUTO EXOTIC - VEHICLE DATABASE
+// Complete vehicle data with exact prices from Excel
 
 const VEHICLE_DATABASE = [
-    // Compactos
-    { name: "Blista", value: 8000, speed: "151 km/h", acceleration: "23%", seats: 2, category: "Compacto" },
-    { name: "Brioso 300", value: 13000, speed: "119 km/h", acceleration: "18%", seats: 2, category: "Compacto" },
-    { name: "Brioso 300 Widebody", value: 17000, speed: "134 km/h", acceleration: "22%", seats: 2, category: "Compacto" },
-    { name: "Brioso R/A", value: 18000, speed: "150 km/h", acceleration: "29%", seats: 2, category: "Compacto" },
-    { name: "Cheburek", value: 12000, speed: "161 km/h", acceleration: "26%", seats: 2, category: "Compacto" },
-    { name: "Club", value: 20000, speed: "150 km/h", acceleration: "24%", seats: 2, category: "Compacto" },
-    { name: "Dilettante", value: 9000, speed: "86 km/h", acceleration: "10%", seats: 4, category: "Compacto" },
-    { name: "FR36", value: 56000, speed: "170 km/h", acceleration: "30%", seats: 2, category: "Compacto" },
-    { name: "Issi", value: 10000, speed: "151 km/h", acceleration: "23%", seats: 2, category: "Compacto" },
-    { name: "Issi Classic", value: 12000, speed: "143 km/h", acceleration: "26%", seats: 2, category: "Compacto" },
-    { name: "Kanjo", value: 12000, speed: "160 km/h", acceleration: "32%", seats: 2, category: "Compacto" },
-    { name: "Kanjo SJ", value: 18000, speed: "161 km/h", acceleration: "31%", seats: 2, category: "Compacto" },
-    { name: "Michelli GT", value: 21000, speed: "160 km/h", acceleration: "28%", seats: 2, category: "Compacto" },
-    { name: "Panto", value: 10000, speed: "147 km/h", acceleration: "27%", seats: 2, category: "Compacto" },
-    { name: "Prairie", value: 12000, speed: "147 km/h", acceleration: "22%", seats: 2, category: "Compacto" },
-    { name: "Rhapsody", value: 7000, speed: "149 km/h", acceleration: "23%", seats: 2, category: "Compacto" },
-    { name: "Weevil", value: 11000, speed: "118 km/h", acceleration: "19%", seats: 2, category: "Compacto" },
+    // ========== COMPACTO ==========
+    { name: "Blista", value: 8000, speed: "151 km/h", acceleration: "23%", seats: 2, category: "Compacto", perf: [80, 88, 96, 104, 112], cosmetics: 40, stance: 40, repaint: 40, wheels: 40, lights: 40, tires: 40, extras: 40, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Brioso 300", value: 13000, speed: "119 km/h", acceleration: "18%", seats: 2, category: "Compacto", perf: [130, 143, 156, 169, 182], cosmetics: 65, stance: 65, repaint: 65, wheels: 65, lights: 65, tires: 65, extras: 65, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Brioso 300 Widebody", value: 17000, speed: "134 km/h", acceleration: "22%", seats: 2, category: "Compacto", perf: [170, 187, 204, 221, 238], cosmetics: 85, stance: 85, repaint: 85, wheels: 85, lights: 85, tires: 85, extras: 85, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Brioso R/A", value: 18000, speed: "150 km/h", acceleration: "29%", seats: 2, category: "Compacto", perf: [180, 198, 216, 234, 252], cosmetics: 90, stance: 90, repaint: 90, wheels: 90, lights: 90, tires: 90, extras: 90, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Cheburek", value: 12000, speed: "161 km/h", acceleration: "26%", seats: 2, category: "Compacto", perf: [120, 132, 144, 156, 168], cosmetics: 60, stance: 60, repaint: 60, wheels: 60, lights: 60, tires: 60, extras: 60, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Club", value: 20000, speed: "150 km/h", acceleration: "24%", seats: 2, category: "Compacto", perf: [200, 220, 240, 260, 280], cosmetics: 100, stance: 100, repaint: 100, wheels: 100, lights: 100, tires: 100, extras: 100, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Dilettante", value: 9000, speed: "86 km/h", acceleration: "10%", seats: 4, category: "Compacto", perf: [90, 99, 108, 117, 126], cosmetics: 45, stance: 45, repaint: 45, wheels: 45, lights: 45, tires: 45, extras: 45, dados: [200, 250, 300], maint: 1.5 },
+    { name: "FR36", value: 56000, speed: "170 km/h", acceleration: "30%", seats: 2, category: "Compacto", perf: [560, 616, 672, 728, 784], cosmetics: 280, stance: 280, repaint: 280, wheels: 280, lights: 280, tires: 280, extras: 280, dados: [250, 300, 350], maint: 2 },
+    { name: "Issi", value: 10000, speed: "151 km/h", acceleration: "23%", seats: 2, category: "Compacto", perf: [100, 110, 120, 130, 140], cosmetics: 50, stance: 50, repaint: 50, wheels: 50, lights: 50, tires: 50, extras: 50, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Issi Classic", value: 12000, speed: "143 km/h", acceleration: "26%", seats: 2, category: "Compacto", perf: [120, 132, 144, 156, 168], cosmetics: 60, stance: 60, repaint: 60, wheels: 60, lights: 60, tires: 60, extras: 60, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Kanjo", value: 12000, speed: "160 km/h", acceleration: "32%", seats: 2, category: "Compacto", perf: [120, 132, 144, 156, 168], cosmetics: 60, stance: 60, repaint: 60, wheels: 60, lights: 60, tires: 60, extras: 60, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Kanjo SJ", value: 18000, speed: "161 km/h", acceleration: "31%", seats: 2, category: "Compacto", perf: [180, 198, 216, 234, 252], cosmetics: 90, stance: 90, repaint: 90, wheels: 90, lights: 90, tires: 90, extras: 90, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Michelli GT", value: 21000, speed: "160 km/h", acceleration: "28%", seats: 2, category: "Compacto", perf: [210, 231, 252, 273, 294], cosmetics: 105, stance: 105, repaint: 105, wheels: 105, lights: 105, tires: 105, extras: 105, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Panto", value: 10000, speed: "147 km/h", acceleration: "27%", seats: 2, category: "Compacto", perf: [100, 110, 120, 130, 140], cosmetics: 50, stance: 50, repaint: 50, wheels: 50, lights: 50, tires: 50, extras: 50, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Prairie", value: 12000, speed: "147 km/h", acceleration: "22%", seats: 2, category: "Compacto", perf: [120, 132, 144, 156, 168], cosmetics: 60, stance: 60, repaint: 60, wheels: 60, lights: 60, tires: 60, extras: 60, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Rhapsody", value: 7000, speed: "149 km/h", acceleration: "23%", seats: 2, category: "Compacto", perf: [70, 77, 84, 91, 98], cosmetics: 35, stance: 35, repaint: 35, wheels: 35, lights: 35, tires: 35, extras: 35, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Weevil", value: 11000, speed: "118 km/h", acceleration: "19%", seats: 2, category: "Compacto", perf: [110, 121, 132, 143, 154], cosmetics: 55, stance: 55, repaint: 55, wheels: 55, lights: 55, tires: 55, extras: 55, dados: [200, 250, 300], maint: 1.5 },
 
-    // Coupes
-    { name: "Cognoscenti Cabrio", value: 55000, speed: "163 km/h", acceleration: "26%", seats: 2, category: "Coupe" },
-    { name: "Exemplar", value: 32000, speed: "173 km/h", acceleration: "26%", seats: 4, category: "Coupe" },
-    { name: "F620", value: 46000, speed: "173 km/h", acceleration: "24%", seats: 2, category: "Coupe" },
-    { name: "Felon", value: 42000, speed: "165 km/h", acceleration: "24%", seats: 4, category: "Coupe" },
-    { name: "Felon GT", value: 55000, speed: "156 km/h", acceleration: "24%", seats: 2, category: "Coupe" },
-    { name: "Jackal", value: 38000, speed: "166 km/h", acceleration: "22%", seats: 4, category: "Coupe" },
-    { name: "Oracle XS", value: 35000, speed: "166 km/h", acceleration: "27%", seats: 4, category: "Coupe" },
-    { name: "Previon", value: 26000, speed: "169 km/h", acceleration: "32%", seats: 2, category: "Coupe" },
-    { name: "Sentinel", value: 32000, speed: "164 km/h", acceleration: "21%", seats: 2, category: "Coupe" },
-    { name: "Sentinel XS", value: 40000, speed: "164 km/h", acceleration: "21%", seats: 2, category: "Coupe" },
-    { name: "Windsor", value: 95000, speed: "173 km/h", acceleration: "28%", seats: 2, category: "Coupe" },
-    { name: "Windsor Drop", value: 125000, speed: "172 km/h", acceleration: "28%", seats: 2, category: "Coupe" },
-    { name: "Zion", value: 36000, speed: "169 km/h", acceleration: "22%", seats: 2, category: "Coupe" },
-    { name: "Zion Cabrio", value: 45000, speed: "169 km/h", acceleration: "22%", seats: 2, category: "Coupe" },
+    // ========== COUPE ==========
+    { name: "Cognoscenti Cabrio", value: 55000, speed: "163 km/h", acceleration: "26%", seats: 2, category: "Coupe", perf: [550, 605, 660, 715, 770], cosmetics: 275, stance: 275, repaint: 275, wheels: 275, lights: 275, tires: 275, extras: 275, dados: [250, 300, 350], maint: 2 },
+    { name: "Exemplar", value: 32000, speed: "173 km/h", acceleration: "26%", seats: 4, category: "Coupe", perf: [320, 352, 384, 416, 448], cosmetics: 160, stance: 160, repaint: 160, wheels: 160, lights: 160, tires: 160, extras: 160, dados: [200, 250, 300], maint: 1.5 },
+    { name: "F620", value: 46000, speed: "173 km/h", acceleration: "24%", seats: 2, category: "Coupe", perf: [460, 506, 552, 598, 644], cosmetics: 230, stance: 230, repaint: 230, wheels: 230, lights: 230, tires: 230, extras: 230, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Felon", value: 42000, speed: "165 km/h", acceleration: "24%", seats: 4, category: "Coupe", perf: [420, 462, 504, 546, 588], cosmetics: 210, stance: 210, repaint: 210, wheels: 210, lights: 210, tires: 210, extras: 210, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Felon GT", value: 55000, speed: "156 km/h", acceleration: "24%", seats: 2, category: "Coupe", perf: [550, 605, 660, 715, 770], cosmetics: 275, stance: 275, repaint: 275, wheels: 275, lights: 275, tires: 275, extras: 275, dados: [250, 300, 350], maint: 2 },
+    { name: "Jackal", value: 38000, speed: "166 km/h", acceleration: "22%", seats: 4, category: "Coupe", perf: [380, 418, 456, 494, 532], cosmetics: 190, stance: 190, repaint: 190, wheels: 190, lights: 190, tires: 190, extras: 190, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Oracle XS", value: 35000, speed: "166 km/h", acceleration: "27%", seats: 4, category: "Coupe", perf: [350, 385, 420, 455, 490], cosmetics: 175, stance: 175, repaint: 175, wheels: 175, lights: 175, tires: 175, extras: 175, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Previon", value: 26000, speed: "169 km/h", acceleration: "32%", seats: 2, category: "Coupe", perf: [260, 286, 312, 338, 364], cosmetics: 130, stance: 130, repaint: 130, wheels: 130, lights: 130, tires: 130, extras: 130, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Sentinel", value: 32000, speed: "164 km/h", acceleration: "21%", seats: 2, category: "Coupe", perf: [320, 352, 384, 416, 448], cosmetics: 160, stance: 160, repaint: 160, wheels: 160, lights: 160, tires: 160, extras: 160, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Sentinel XS", value: 40000, speed: "164 km/h", acceleration: "21%", seats: 2, category: "Coupe", perf: [400, 440, 480, 520, 560], cosmetics: 200, stance: 200, repaint: 200, wheels: 200, lights: 200, tires: 200, extras: 200, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Windsor", value: 95000, speed: "173 km/h", acceleration: "28%", seats: 2, category: "Coupe", perf: [950, 1045, 1140, 1235, 1330], cosmetics: 475, stance: 475, repaint: 475, wheels: 475, lights: 475, tires: 475, extras: 475, dados: [250, 300, 350], maint: 2 },
+    { name: "Windsor Drop", value: 125000, speed: "172 km/h", acceleration: "28%", seats: 2, category: "Coupe", perf: [1250, 1375, 1500, 1625, 1750], cosmetics: 625, stance: 625, repaint: 625, wheels: 625, lights: 625, tires: 625, extras: 625, dados: [300, 350, 400], maint: 2.5 },
+    { name: "Zion", value: 36000, speed: "169 km/h", acceleration: "22%", seats: 2, category: "Coupe", perf: [360, 396, 432, 468, 504], cosmetics: 180, stance: 180, repaint: 180, wheels: 180, lights: 180, tires: 180, extras: 180, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Zion Cabrio", value: 45000, speed: "169 km/h", acceleration: "22%", seats: 2, category: "Coupe", perf: [450, 495, 540, 585, 630], cosmetics: 225, stance: 225, repaint: 225, wheels: 225, lights: 225, tires: 225, extras: 225, dados: [200, 250, 300], maint: 1.5 },
 
-    // Motos
-    { name: "Akuma", value: 120000, speed: "174 km/h", acceleration: "40%", seats: 2, category: "Moto" },
-    { name: "Avarus", value: 18000, speed: "159 km/h", acceleration: "27%", seats: 1, category: "Moto" },
-    { name: "Bagger", value: 13500, speed: "136 km/h", acceleration: "21%", seats: 2, category: "Moto" },
-    { name: "Bati 801", value: 32000, speed: "177 km/h", acceleration: "30%", seats: 2, category: "Moto" },
-    { name: "Bati 801RR", value: 49000, speed: "177 km/h", acceleration: "30%", seats: 2, category: "Moto" },
-    { name: "BF400", value: 80000, speed: "159 km/h", acceleration: "29%", seats: 2, category: "Moto" },
-    { name: "Carbon RS", value: 18000, speed: "169 km/h", acceleration: "30%", seats: 2, category: "Moto" },
-    { name: "Chimera", value: 38000, speed: "133 km/h", acceleration: "29%", seats: 1, category: "Moto" },
-    { name: "Cliffhanger", value: 9500, speed: "177 km/h", acceleration: "32%", seats: 2, category: "Moto" },
-    { name: "Daemon (Custom)", value: 13500, speed: "156 km/h", acceleration: "26%", seats: 2, category: "Moto" },
-    { name: "Daemon (Lost MC)", value: 11500, speed: "155 km/h", acceleration: "26%", seats: 2, category: "Moto" },
-    { name: "Defiler", value: 9800, speed: "176 km/h", acceleration: "41%", seats: 1, category: "Moto" },
-    { name: "Diabolus", value: 90000, speed: "170 km/h", acceleration: "31%", seats: 1, category: "Moto" },
-    { name: "Diabolus Custom", value: 100000, speed: "171 km/h", acceleration: "32%", seats: 1, category: "Moto" },
-    { name: "Double T", value: 80000, speed: "173 km/h", acceleration: "31%", seats: 2, category: "Moto" },
-    { name: "Enduro", value: 5500, speed: "143 km/h", acceleration: "30%", seats: 2, category: "Moto" },
-    { name: "Esskey", value: 4200, speed: "159 km/h", acceleration: "29%", seats: 2, category: "Moto" },
-    { name: "Faggio", value: 2800, speed: "85 km/h", acceleration: "10%", seats: 1, category: "Moto" },
-    { name: "Faggio Mod", value: 3000, speed: "99 km/h", acceleration: "19%", seats: 1, category: "Moto" },
-    { name: "Faggio Sport", value: 2500, speed: "102 km/h", acceleration: "20%", seats: 2, category: "Moto" },
-    { name: "FCR 1000", value: 50000, speed: "167 km/h", acceleration: "31%", seats: 1, category: "Moto" },
-    { name: "FCR 1000 Custom", value: 70000, speed: "168 km/h", acceleration: "31%", seats: 1, category: "Moto" },
-    { name: "Gargoyle", value: 16500, speed: "174 km/h", acceleration: "31%", seats: 2, category: "Moto" },
-    { name: "Hakuchou", value: 85000, speed: "178 km/h", acceleration: "31%", seats: 2, category: "Moto" },
-    { name: "Hakuchou Drag", value: 95000, speed: "187 km/h", acceleration: "43%", seats: 2, category: "Moto" },
-    { name: "Hexer", value: 12000, speed: "155 km/h", acceleration: "26%", seats: 2, category: "Moto" },
-    { name: "Innovation", value: 23500, speed: "162 km/h", acceleration: "32%", seats: 2, category: "Moto" },
-    { name: "Manchez", value: 13000, speed: "159 km/h", acceleration: "29%", seats: 2, category: "Moto" },
-    { name: "Manchez Scout", value: 25000, speed: "150 km/h", acceleration: "27%", seats: 1, category: "Moto" },
-    { name: "Nemesis", value: 11000, speed: "162 km/h", acceleration: "30%", seats: 2, category: "Moto" },
-    { name: "Nightblade", value: 25000, speed: "169 km/h", acceleration: "31%", seats: 2, category: "Moto" },
-    { name: "PCJ-600", value: 10000, speed: "143 km/h", acceleration: "26%", seats: 2, category: "Moto" },
-    { name: "Powersurge", value: 500000, speed: "154 km/h", acceleration: "82%", seats: 1, category: "Moto" },
-    { name: "RatBike", value: 3000, speed: "133 km/h", acceleration: "22%", seats: 2, category: "Moto" },
-    { name: "Reever", value: 43000, speed: "180 km/h", acceleration: "41%", seats: 1, category: "Moto" },
-    { name: "Ruffian", value: 7800, speed: "168 km/h", acceleration: "34%", seats: 2, category: "Moto" },
-    { name: "Sanchez", value: 40000, speed: "142 km/h", acceleration: "33%", seats: 2, category: "Moto" },
-    { name: "Sanchez (Livery)", value: 32000, speed: "142 km/h", acceleration: "33%", seats: 2, category: "Moto" },
-    { name: "Sanctus", value: 45000, speed: "167 km/h", acceleration: "41%", seats: 1, category: "Moto" },
-    { name: "Shinobi", value: 110000, speed: "188 km/h", acceleration: "36%", seats: 1, category: "Moto" },
-    { name: "Sovereign", value: 22000, speed: "159 km/h", acceleration: "27%", seats: 1, category: "Moto" },
-    { name: "Thrust", value: 24000, speed: "178 km/h", acceleration: "26%", seats: 2, category: "Moto" },
-    { name: "Vader", value: 7200, speed: "152 km/h", acceleration: "27%", seats: 2, category: "Moto" },
-    { name: "Vortex", value: 9800, speed: "176 km/h", acceleration: "40%", seats: 1, category: "Moto" },
-    { name: "Wolfsbane", value: 9000, speed: "133 km/h", acceleration: "22%", seats: 2, category: "Moto" },
-    { name: "Zombie Bobber", value: 9500, speed: "161 km/h", acceleration: "29%", seats: 1, category: "Moto" },
-    { name: "Zombie Chopper", value: 12000, speed: "161 km/h", acceleration: "29%", seats: 2, category: "Moto" },
+    // ========== MOTO ==========
+    { name: "Akuma", value: 120000, speed: "174 km/h", acceleration: "40%", seats: 2, category: "Moto", perf: [1200, 1320, 1440, 1560, 1680], cosmetics: 600, stance: 600, repaint: 600, wheels: 600, lights: 600, tires: 600, extras: 600, dados: [300, 350, 400], maint: 2.5 },
+    { name: "Avarus", value: 18000, speed: "159 km/h", acceleration: "27%", seats: 1, category: "Moto", perf: [180, 198, 216, 234, 252], cosmetics: 90, stance: 90, repaint: 90, wheels: 90, lights: 90, tires: 90, extras: 90, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Bagger", value: 13500, speed: "136 km/h", acceleration: "21%", seats: 2, category: "Moto", perf: [135, 149, 162, 176, 189], cosmetics: 68, stance: 68, repaint: 68, wheels: 68, lights: 68, tires: 68, extras: 68, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Bati 801", value: 32000, speed: "177 km/h", acceleration: "30%", seats: 2, category: "Moto", perf: [320, 352, 384, 416, 448], cosmetics: 160, stance: 160, repaint: 160, wheels: 160, lights: 160, tires: 160, extras: 160, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Bati 801RR", value: 49000, speed: "177 km/h", acceleration: "30%", seats: 2, category: "Moto", perf: [490, 539, 588, 637, 686], cosmetics: 245, stance: 245, repaint: 245, wheels: 245, lights: 245, tires: 245, extras: 245, dados: [200, 250, 300], maint: 1.5 },
+    { name: "BF400", value: 80000, speed: "159 km/h", acceleration: "29%", seats: 2, category: "Moto", perf: [800, 880, 960, 1040, 1120], cosmetics: 400, stance: 400, repaint: 400, wheels: 400, lights: 400, tires: 400, extras: 400, dados: [250, 300, 350], maint: 2 },
+    { name: "Carbon RS", value: 18000, speed: "169 km/h", acceleration: "30%", seats: 2, category: "Moto", perf: [180, 198, 216, 234, 252], cosmetics: 90, stance: 90, repaint: 90, wheels: 90, lights: 90, tires: 90, extras: 90, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Chimera", value: 38000, speed: "133 km/h", acceleration: "29%", seats: 1, category: "Moto", perf: [380, 418, 456, 494, 532], cosmetics: 190, stance: 190, repaint: 190, wheels: 190, lights: 190, tires: 190, extras: 190, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Cliffhanger", value: 9500, speed: "177 km/h", acceleration: "32%", seats: 2, category: "Moto", perf: [95, 105, 114, 124, 133], cosmetics: 48, stance: 48, repaint: 48, wheels: 48, lights: 48, tires: 48, extras: 48, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Daemon (Custom)", value: 13500, speed: "156 km/h", acceleration: "26%", seats: 2, category: "Moto", perf: [135, 149, 162, 176, 189], cosmetics: 68, stance: 68, repaint: 68, wheels: 68, lights: 68, tires: 68, extras: 68, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Daemon (Lost MC)", value: 11500, speed: "155 km/h", acceleration: "26%", seats: 2, category: "Moto", perf: [115, 127, 138, 150, 161], cosmetics: 58, stance: 58, repaint: 58, wheels: 58, lights: 58, tires: 58, extras: 58, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Powersurge", value: 500000, speed: "154 km/h", acceleration: "82%", seats: 1, category: "Moto", perf: [5000, 5500, 6000, 6500, 7000], cosmetics: 2500, stance: 2500, repaint: 2500, wheels: 2500, lights: 2500, tires: 2500, extras: 2500, dados: [400, 450, 500], maint: 3.5 },
 
-    // Muscle
-    { name: "Blade", value: 15000, speed: "152 km/h", acceleration: "32%", seats: 2, category: "Muscle" },
-    { name: "Broadway", value: 90000, speed: "135 km/h", acceleration: "19%", seats: 2, category: "Muscle" },
-    { name: "Buccaneer", value: 18000, speed: "166 km/h", acceleration: "28%", seats: 2, category: "Muscle" },
-    { name: "Buccaneer Custom", value: 24000, speed: "166 km/h", acceleration: "28%", seats: 2, category: "Muscle" },
-    { name: "Buffalo EVX", value: 120000, speed: "180 km/h", acceleration: "38%", seats: 2, category: "Muscle" },
-    { name: "Chino", value: 15000, speed: "127 km/h", acceleration: "20%", seats: 2, category: "Muscle" },
-    { name: "Chino Custom", value: 19000, speed: "131 km/h", acceleration: "21%", seats: 2, category: "Muscle" },
-    { name: "Clique", value: 20000, speed: "166 km/h", acceleration: "30%", seats: 2, category: "Muscle" },
-    { name: "Coquette BlackFin", value: 55000, speed: "162 km/h", acceleration: "29%", seats: 2, category: "Muscle" },
-    { name: "Deviant", value: 95000, speed: "153 km/h", acceleration: "29%", seats: 2, category: "Muscle" },
-    { name: "Dominator", value: 35000, speed: "174 km/h", acceleration: "29%", seats: 2, category: "Muscle" },
-    { name: "Dominator ASP", value: 70000, speed: "180 km/h", acceleration: "34%", seats: 2, category: "Muscle" },
-    { name: "Dominator FX", value: 55000, speed: "177 km/h", acceleration: "30%", seats: 2, category: "Muscle" },
-    { name: "Dominator GT", value: 120000, speed: "179 km/h", acceleration: "34%", seats: 2, category: "Muscle" },
-    { name: "Dominator GTT", value: 50000, speed: "165 km/h", acceleration: "30%", seats: 2, category: "Muscle" },
-    { name: "Dominator GTX", value: 67000, speed: "170 km/h", acceleration: "34%", seats: 2, category: "Muscle" },
-    { name: "Drift Yosemite", value: 55000, speed: "160 km/h", acceleration: "40%", seats: 2, category: "Muscle" },
-    { name: "Dukes", value: 28000, speed: "172 km/h", acceleration: "32%", seats: 2, category: "Muscle" },
-    { name: "Faction", value: 20000, speed: "168 km/h", acceleration: "28%", seats: 2, category: "Muscle" },
-    { name: "Faction Custom", value: 30000, speed: "168 km/h", acceleration: "28%", seats: 2, category: "Muscle" },
-    { name: "Faction Custom Donk", value: 40000, speed: "127 km/h", acceleration: "20%", seats: 2, category: "Muscle" },
-    { name: "Gauntlet", value: 30000, speed: "169 km/h", acceleration: "30%", seats: 2, category: "Muscle" },
-    { name: "Gauntlet Classic", value: 32000, speed: "159 km/h", acceleration: "28%", seats: 2, category: "Muscle" },
-    { name: "Gauntlet Classic Custom", value: 120000, speed: "174 km/h", acceleration: "29%", seats: 2, category: "Muscle" },
-    { name: "Gauntlet Hellfire", value: 90000, speed: "175 km/h", acceleration: "36%", seats: 2, category: "Muscle" },
-    { name: "Glendale Custom", value: 45000, speed: "143 km/h", acceleration: "23%", seats: 4, category: "Muscle" },
-    { name: "Greenwood", value: 7000, speed: "172 km/h", acceleration: "28%", seats: 4, category: "Muscle" },
-    { name: "Hermes", value: 120000, speed: "149 km/h", acceleration: "28%", seats: 2, category: "Muscle" },
-    { name: "Hotknife", value: 125000, speed: "162 km/h", acceleration: "30%", seats: 2, category: "Muscle" },
-    { name: "Hotring Hellfire", value: 130000, speed: "176 km/h", acceleration: "37%", seats: 2, category: "Muscle" },
+    // ========== MUSCLE ==========
+    { name: "Blade", value: 15000, speed: "152 km/h", acceleration: "32%", seats: 2, category: "Muscle", perf: [150, 165, 180, 195, 210], cosmetics: 75, stance: 75, repaint: 75, wheels: 75, lights: 75, tires: 75, extras: 75, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Broadway", value: 90000, speed: "135 km/h", acceleration: "19%", seats: 2, category: "Muscle", perf: [900, 990, 1080, 1170, 1260], cosmetics: 450, stance: 450, repaint: 450, wheels: 450, lights: 450, tires: 450, extras: 450, dados: [250, 300, 350], maint: 2 },
+    { name: "Buccaneer", value: 18000, speed: "166 km/h", acceleration: "28%", seats: 2, category: "Muscle", perf: [180, 198, 216, 234, 252], cosmetics: 90, stance: 90, repaint: 90, wheels: 90, lights: 90, tires: 90, extras: 90, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Buffalo S", value: 20000, speed: "167 km/h", acceleration: "29%", seats: 4, category: "Sport", perf: [200, 220, 240, 260, 280], cosmetics: 100, stance: 100, repaint: 100, wheels: 100, lights: 100, tires: 100, extras: 100, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Dominator", value: 35000, speed: "174 km/h", acceleration: "29%", seats: 2, category: "Muscle", perf: [350, 385, 420, 455, 490], cosmetics: 175, stance: 175, repaint: 175, wheels: 175, lights: 175, tires: 175, extras: 175, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Elegy RH8", value: 38500, speed: "175 km/h", acceleration: "33%", seats: 2, category: "Sport", perf: [385, 424, 462, 501, 539], cosmetics: 193, stance: 193, repaint: 193, wheels: 193, lights: 193, tires: 193, extras: 193, dados: [200, 250, 300], maint: 1.5 },
+    { name: "Sultan RS", value: 120000, speed: "178 km/h", acceleration: "33%", seats: 2, category: "Super", perf: [1200, 1320, 1440, 1560, 1680], cosmetics: 600, stance: 600, repaint: 600, wheels: 600, lights: 600, tires: 600, extras: 600, dados: [300, 350, 400], maint: 2.5 },
+    { name: "Banshee 900R", value: 130000, speed: "161 km/h", acceleration: "36%", seats: 2, category: "Super", perf: [1300, 1430, 1560, 1690, 1820], cosmetics: 650, stance: 650, repaint: 650, wheels: 650, lights: 650, tires: 650, extras: 650, dados: [300, 350, 400], maint: 2.5 }
 ];
-
-// Pricing calculation functions
-function calculatePerformancePrice(vehicleValue, level) {
-    // Performance prices by level: 1=200, 2=220, 3=240, 4=260, 5=280 for base $100,000 vehicle
-    // Formula: (vehicleValue / 100000) * baseprice
-    const basePrices = { 1: 200, 2: 220, 3: 240, 4: 260, 5: 280 };
-    const multiplier = vehicleValue / 100;
-    return Math.round(basePrices[level] * (vehicleValue / 100000) * 100);
-}
-
-function calculateAestheticPrice(vehicleValue) {
-    // Aesthetic prices are typically 0.5% of vehicle value (100 for 20,000 vehicle)
-    return Math.round(vehicleValue * 0.005);
-}
-
-function calculateMaintenanceMultiplier(vehicleValue) {
-    // Maintenance multiplier based on vehicle tier
-    if (vehicleValue < 50000) return 1.5;
-    if (vehicleValue < 100000) return 2.0;
-    if (vehicleValue < 300000) return 2.5;
-    return 3.5;
-}
-
-function getDadosPricing(vehicleValue) {
-    // Dados pricing tiers based on vehicle value
-    if (vehicleValue < 50000) {
-        return { tier1: 200, tier2: 250, tier3: 300 };
-    } else if (vehicleValue < 100000) {
-        return { tier1: 250, tier2: 300, tier3: 350 };
-    } else {
-        return { tier1: 300, tier2: 350, tier3: 400 };
-    }
-}
 
 // Export for use in main script
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        VEHICLE_DATABASE,
-        calculatePerformancePrice,
-        calculateAestheticPrice,
-        calculateMaintenanceMultiplier,
-        getDadosPricing
-    };
+    module.exports = { VEHICLE_DATABASE };
 }
