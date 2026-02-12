@@ -2,7 +2,6 @@
 // Updated with: Autocomplete, Fixed Performance Selection, Exact Prices, Discounts
 
 // Database will be loaded from vehicles-data.js
-let VEHICLE_DATABASE = [];
 let selectedVehicle = null;
 
 // DOM Elements
